@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"io"
+	// "io"
 	"os"
 	// "math"
 	"strings"
@@ -29,6 +29,22 @@ func (b TicTacGoBoard) String() string {
 	return fmt.Sprint(boardString)
 }
 
+func (b *TicTacGoBoard) placeOnBoard(position int, character string) {
+	currentPosition := 1
+	for i := 0; i < len(b); i++ {
+		for j := 0; j < len(b[0]); j++ {
+			fmt.Printf("looking at position %v, %v: %v\n", i, j, b[i][j])
+			if position == currentPosition {
+				b[i][j] = character
+				currentPosition += 1
+				fmt.Printf("updated: %v\n", b[i][j])
+			} else {
+				currentPosition += 1
+			}
+		}
+	}
+}
+
 func NewTicTacGoBoard() *TicTacGoBoard {
 	return &TicTacGoBoard{{"", "", ""}, {"", "", ""}, {"", "", ""}}
 }
@@ -41,22 +57,18 @@ func main() {
 
 	fmt.Printf("Welcome to Tic Tac Go!\n")
 
-	for { // game loop
-		fmt.Println("key:")
-		fmt.Println(key)
-		fmt.Println("board:")
-		fmt.Println(gameBoard)
-		fmt.Printf("Which space would you like to write to?\nInput number here: ")
+	fmt.Println("key:")
+	fmt.Println(key)
+	fmt.Println("board:")
+	fmt.Println(gameBoard)
+	fmt.Printf("Which space would you like to write to?\nInput number here: ")
 
-		n, err := input.Read(inputBuffer)
-		if err == io.EOF {
-			break
-			fmt.Println("Done reading input")
-		} else if err != nil {
-			fmt.Errorf("Error! ", err)
-		}
-		fmt.Printf("%v bytes read: %v\n", n, string(inputBuffer))
-		// clear string
-	}
+	n, _ := input.Read(inputBuffer)
+	fmt.Printf("%v bytes read: %v\n", n, string(inputBuffer))
+	fmt.Println(inputBuffer)
+	gameBoard.placeOnBoard(5, "X")
+	fmt.Println(gameBoard)
+
+	// clear string
 	fmt.Printf("Thanks for playing!\n")
 }
