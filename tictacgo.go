@@ -6,6 +6,7 @@ import (
 	"os"
 	// "math"
 	"errors"
+	"github.com/fatih/color"
 	"strconv"
 	"strings"
 )
@@ -31,7 +32,7 @@ func (b TicTacGoBoard) String() string {
 	return fmt.Sprint(boardString)
 }
 
-func (b *TicTacGoBoard) placeOnBoard(position int, character string) (err error) {
+func (b *TicTacGoBoard) PlaceOnBoard(position int, character string) (err error) {
 	if position > (len(b) * len(b[0])) {
 		return errors.New("Error placing " + character + " in board: position is too high!")
 	}
@@ -56,15 +57,20 @@ func (b *TicTacGoBoard) placeOnBoard(position int, character string) (err error)
 	return nil
 }
 
+
+// not sure I fully understand this bit.
+// first, we create a TicTacGoBoard literal
+// then, we return the 
 func NewTicTacGoBoard() *TicTacGoBoard {
 	return &TicTacGoBoard{{"", "", ""}, {"", "", ""}, {"", "", ""}}
 }
 
-func gameLoop() {
+func GameLoop() {
 	key := TicTacGoBoard{{"1", "2", "3"}, {"4", "5", "6"}, {"7", "8", "9"}}
-	gameBoard := NewTicTacGoBoard()
-	input := os.Stdin //os.Stdin is a pointer to a os.File
+	gameBoard := NewTicTacGoBoard() // a pointer to a TicTacGoBoard
+	input := os.Stdin               //os.Stdin is a pointer to a os.File
 	inputBuffer := make([]byte, 100)
+	opponent := NewOpponent()
 	for {
 		fmt.Println("key:")
 		fmt.Println(key)
@@ -80,10 +86,13 @@ func gameLoop() {
 			fmt.Println(err)
 		} else {
 			fmt.Println(i)
-			err := gameBoard.placeOnBoard(i, "X")
+			err := gameBoard.PlaceOnBoard(i, "X")
 			if err != nil {
-				fmt.Println(err)
+				c := color.New(color.FgRed).Add(color.Underline)
+				c.Println(err)
 			}
+			fmt.Println("opponent playing...")
+			opponent.PlaceOnBoard(gameBoard)
 		}
 	}
 
@@ -92,7 +101,7 @@ func gameLoop() {
 func main() {
 
 	fmt.Printf("Welcome to Tic Tac Go!\n")
-	gameLoop()
+	GameLoop()
 	// clear string
 	fmt.Printf("Thanks for playing!\n")
 }
