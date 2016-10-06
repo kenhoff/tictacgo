@@ -57,10 +57,9 @@ func (b *TicTacGoBoard) PlaceOnBoard(position int, character string) (err error)
 	return nil
 }
 
-
 // not sure I fully understand this bit.
 // first, we create a TicTacGoBoard literal
-// then, we return the 
+// then, we return the
 func NewTicTacGoBoard() *TicTacGoBoard {
 	return &TicTacGoBoard{{"", "", ""}, {"", "", ""}, {"", "", ""}}
 }
@@ -99,9 +98,22 @@ func GameLoop() {
 }
 
 func main() {
-
-	fmt.Printf("Welcome to Tic Tac Go!\n")
-	GameLoop()
+	// var playerToken string
+	input := os.Stdin //os.Stdin is a pointer to a os.File
+	inputBuffer := make([]byte, 100)
+	fmt.Println("Welcome to Tic Tac Go!")
+	for {
+		fmt.Printf("Would you like to be X or O? ")
+		n, _ := input.Read(inputBuffer)
+		inputString := strings.TrimSpace(string(inputBuffer[:n]))
+		if (len(inputString) == 1) && ((inputString == "X") || (inputString == "x") || (inputString == "O") || (inputString == "o")) {
+			fmt.Printf("Okay! Good luck, %v\n", inputString)
+			break
+		} else {
+			fmt.Println("That's not an X or an O. Try again, numbnuts.")
+		}
+	}
+	// GameLoop()
 	// clear string
 	fmt.Printf("Thanks for playing!\n")
 }
