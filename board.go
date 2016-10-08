@@ -74,23 +74,57 @@ func (b *TicTacGoBoard) GetOpenPlaces() []int {
 }
 
 func (b *TicTacGoBoard) GetBoardWinner() (string, error) {
+	columnTokens := make([]string, len(b[0]))
+	firstRow := b[0][:]
+	copy(columnTokens, firstRow)
 	for i := 0; i < len(b); i++ { // rows
-		rowToken := b[i][0]
-		fmt.Println("row token:" + rowToken)
-		if rowToken == "" { // if the first row token is blank, then nobody's obviously won that row - move on to the next row
-			fmt.Println("breaking")
-			continue
-		}
-		for j := 0; j < len(b[0]); j++ { // else, loop through all the columns
+		rowToken := b[i][0] // first token in the row
+		isWinningRow := true
+		for j := 0; j < len(b[0]); j++ {
 			if b[i][j] != rowToken { // if it's not the same token as the first token in the row, break and move onto the next row
-				break
+				isWinningRow = false
 			}
-			// if it's the same token, continue on
-			if j == (len(b[i]) - 1) { // if it's the end of the row, then the rowToken has won, and return that
-				return rowToken, nil
+			if b[i][j] != columnTokens[j] {
+				columnTokens[j] = ""
 			}
+		}
+		// getting all the way to the end of the row with "isWinningRow" means that the row has won
+		if isWinningRow && (rowToken != "") {
+			return rowToken, nil
 		}
 	}
-	fmt.Println("returning nil?")
+	for _, token := range columnTokens {
+		if token != "" {
+			return token, nil
+		}
+	}
+
+	// upper left to lower right
+	token := b[0][0]
+	diagonalWin := true
+	for i := 0; i < len(b); i++ {
+		if b[i][i] != token {
+			diagonalWin = false
+			break
+		}
+	}
+	if diagonalWin && (token != "") {
+		return token, nil
+	}
+
+	// upper right to lower left
+	token = b[0][len(b)-1]
+	diagonalWin = true
+	for i := 0; i < len(b); i++ {
+		if b[i][len(b)-1-i] != token {
+			diagonalWin = false
+			break
+		}
+	}
+
+	if diagonalWin && (token != "") {
+		return token, nil
+	}
+
 	return "", errors.New("No winner yet!")
 }

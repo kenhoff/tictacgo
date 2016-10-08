@@ -30,8 +30,7 @@ func GameLoop(playerToken string, opponentToken string) {
 			inputString := strings.TrimSpace(string(inputBuffer[:n]))
 			i, err := strconv.Atoi(inputString)
 			if err != nil {
-				fmt.Println("that's not a real number!")
-				fmt.Println(err)
+				fmt.Println("That's not a real number!")
 			} else {
 				fmt.Println(i)
 				err := gameBoard.PlaceOnBoard(i, playerToken)
@@ -43,18 +42,20 @@ func GameLoop(playerToken string, opponentToken string) {
 				}
 			}
 		}
-		winner, err := gameBoard.GetBoardWinner()
-		if err != nil {
-			fmt.Printf("Game over! We have a winner: %v\n", winner)
-			fmt.Println(err)
-			break
-		} else {
-			fmt.Println(err)
-		}
-		fmt.Println("opponent playing...")
-		opponent.PlaceOnBoard(gameBoard)
-	}
 
+		if winner, err := gameBoard.GetBoardWinner(); err == nil {
+			fmt.Printf("Game over! %v wins!\n", winner)
+			fmt.Println(gameBoard)
+			break
+		}
+		// fmt.Println("opponent playing...")
+		opponent.PlaceOnBoard(gameBoard)
+		if winner, err := gameBoard.GetBoardWinner(); err == nil {
+			fmt.Printf("Game over! %v wins!\n", winner)
+			fmt.Println(gameBoard)
+			break
+		}
+	}
 }
 
 func main() {
