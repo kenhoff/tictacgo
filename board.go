@@ -72,3 +72,25 @@ func (b *TicTacGoBoard) GetOpenPlaces() []int {
 	}
 	return availablePlaces
 }
+
+func (b *TicTacGoBoard) GetBoardWinner() (string, error) {
+	for i := 0; i < len(b); i++ { // rows
+		rowToken := b[i][0]
+		fmt.Println("row token:" + rowToken)
+		if rowToken == "" { // if the first row token is blank, then nobody's obviously won that row - move on to the next row
+			fmt.Println("breaking")
+			continue
+		}
+		for j := 0; j < len(b[0]); j++ { // else, loop through all the columns
+			if b[i][j] != rowToken { // if it's not the same token as the first token in the row, break and move onto the next row
+				break
+			}
+			// if it's the same token, continue on
+			if j == (len(b[i]) - 1) { // if it's the end of the row, then the rowToken has won, and return that
+				return rowToken, nil
+			}
+		}
+	}
+	fmt.Println("returning nil?")
+	return "", errors.New("No winner yet!")
+}
