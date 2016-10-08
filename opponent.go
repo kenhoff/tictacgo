@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
 )
 
 type Opponent struct {
@@ -9,8 +10,8 @@ type Opponent struct {
 	token      string
 }
 
-func NewOpponent() *Opponent {
-	return &Opponent{"braindead", "O"}
+func NewOpponent(opponentToken string) *Opponent {
+	return &Opponent{"braindead", opponentToken}
 }
 
 func (o Opponent) String() string {
@@ -18,10 +19,17 @@ func (o Opponent) String() string {
 }
 
 func (o Opponent) PlaceOnBoard(b *TicTacGoBoard) (err error) {
-	b.PlaceOnBoard(1, o.token)
+	// first, get available slots from board
+	availablePlaces := b.GetOpenPlaces()
+	// then, place at that available slot
+	if len(availablePlaces) == 0 {
+		return nil
+	}
+	err = b.PlaceOnBoard(availablePlaces[rand.Intn(len(availablePlaces))], o.token)
 	if err != nil {
 		return err
 	} else {
 		return nil
 	}
+
 }
