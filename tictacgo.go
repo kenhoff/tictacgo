@@ -32,7 +32,6 @@ func GameLoop(playerToken string, opponentToken string) {
 			if err != nil {
 				fmt.Println("That's not a real number!")
 			} else {
-				fmt.Println(i)
 				err := gameBoard.PlaceOnBoard(i, playerToken)
 				if err != nil {
 					c := color.New(color.FgRed).Add(color.Underline)
