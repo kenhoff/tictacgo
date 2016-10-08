@@ -1,5 +1,7 @@
 # Tic Tac Go
 
+![](screenshot.png)
+
 To install and play:
 
 ```
